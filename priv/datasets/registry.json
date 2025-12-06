@@ -113,12 +113,12 @@
       "size": 50,
       "metadata": {
         "source": "custom",
-        "created_at": "2025-12-06T17:58:25.357519Z"
+        "created_at": "2025-12-06T19:07:34.434205Z"
       },
       "schema": null,
       "splits": []
     },
-    "registered_at": "2025-12-06T17:58:25.357534Z"
+    "registered_at": "2025-12-06T19:07:34.434211Z"
   },
   "stratified_test": {
     "name": "stratified_test",
@@ -126,12 +126,12 @@
       "size": 100,
       "metadata": {
         "source": "custom",
-        "created_at": "2025-12-06T17:58:25.350082Z"
+        "created_at": "2025-12-06T19:07:34.433686Z"
       },
       "schema": null,
       "splits": []
     },
-    "registered_at": "2025-12-06T17:58:25.350096Z"
+    "registered_at": "2025-12-06T19:07:34.433696Z"
   },
   "test_workflow": {
     "name": "test_workflow",
@@ -143,7 +143,7 @@
       "schema": "test_schema",
       "splits": []
     },
-    "registered_at": "2025-12-06T17:58:25.362022Z"
+    "registered_at": "2025-12-06T19:07:34.428761Z"
   },
   "three_split_test": {
     "name": "three_split_test",
@@ -151,11 +151,11 @@
       "size": 100,
       "metadata": {
         "source": "custom",
-        "created_at": "2025-12-06T17:58:25.366586Z"
+        "created_at": "2025-12-06T19:07:34.438185Z"
       },
       "schema": null,
       "splits": []
     },
-    "registered_at": "2025-12-06T17:58:25.366598Z"
+    "registered_at": "2025-12-06T19:07:34.438199Z"
   }
 }

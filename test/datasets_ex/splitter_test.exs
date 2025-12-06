@@ -27,7 +27,7 @@ defmodule DatasetsEx.SplitterTest do
       data = Enum.map(1..100, &%{x: &1})
       dataset = Dataset.new("test", data: data)
 
-      {train, test} = Splitter.split(dataset, seed: 42, shuffle: true)
+      {train, _test} = Splitter.split(dataset, seed: 42, shuffle: true)
 
       # Data should be shuffled
       first_train_x = train.data |> List.first() |> Map.get(:x)

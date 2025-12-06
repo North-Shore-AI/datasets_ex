@@ -120,7 +120,7 @@ defmodule DatasetsEx.IntegrationTest do
 
       {:ok, dataset} = DatasetsEx.create("stratified_test", %{data: data})
 
-      {train, test} =
+      {train, _test} =
         DatasetsEx.stratified_split(dataset,
           label_key: :label,
           ratio: 0.8,

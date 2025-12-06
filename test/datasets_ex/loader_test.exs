@@ -1,6 +1,6 @@
 defmodule DatasetsEx.LoaderTest do
   use ExUnit.Case, async: true
-  alias DatasetsEx.{Loader, Dataset}
+  alias DatasetsEx.Loader
 
   @test_dir "/tmp/datasets_ex_test"
 
