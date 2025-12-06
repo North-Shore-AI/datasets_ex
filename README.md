@@ -1,4 +1,22 @@
-# DatasetsEx
+<p align="center">
+  <img src="assets/datasets_ex.svg" alt="DatasetsEx" width="200">
+</p>
+
+<h1 align="center">DatasetsEx</h1>
+
+<p align="center">
+  <a href="https://github.com/North-Shore-AI/datasets_ex/actions"><img src="https://github.com/North-Shore-AI/datasets_ex/workflows/CI/badge.svg" alt="CI Status"></a>
+  <a href="https://hex.pm/packages/datasets_ex"><img src="https://img.shields.io/hexpm/v/datasets_ex.svg" alt="Hex.pm"></a>
+  <a href="https://hexdocs.pm/datasets_ex"><img src="https://img.shields.io/badge/docs-hexdocs-blue.svg" alt="Documentation"></a>
+  <img src="https://img.shields.io/badge/elixir-%3E%3D%201.14-purple.svg" alt="Elixir">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
+</p>
+
+<p align="center">
+  Dataset management with versioning, multiple loaders, and streaming support
+</p>
+
+---
 
 Dataset management library for ML experiments in Elixir.
 
@@ -6,12 +24,15 @@ DatasetsEx provides a comprehensive toolkit for managing datasets in machine lea
 
 ## Features
 
-- **Standard Dataset Loading**: Built-in loaders for SciFact, FEVER, and other common ML datasets
+- **Standard Dataset Loading**: Built-in loaders for SciFact, FEVER, GSM8K, HumanEval, MMLU, TruthfulQA, HellaSwag, and custom datasets
 - **Custom Datasets**: Create and manage your own datasets with flexible schemas
-- **Versioning & Lineage**: Track dataset versions with full lineage history
+- **Versioning & Lineage**: Track dataset versions with full lineage history and diffs
 - **Smart Splitting**: Train/test splits with support for stratification and k-fold cross-validation
 - **Multiple Formats**: Import/export JSONL, JSON, and CSV formats
 - **Reproducibility**: Deterministic splits with seed support
+- **Data Transformation**: Text normalization, deduplication, sampling, balancing, and augmentation
+- **Quality Checks**: Schema validation, duplicate detection, label distribution analysis, and outlier detection
+- **Streaming Support**: Memory-efficient processing of large datasets with lazy evaluation and parallel processing
 
 ## Installation
 
@@ -38,7 +59,7 @@ end
 
 # List available datasets
 DatasetsEx.list()
-# => [:scifact, :fever]
+# => [:scifact, :fever, :gsm8k, :human_eval, :mmlu, :truthful_qa, :hellaswag]
 
 # Get dataset info
 DatasetsEx.info(:scifact)
@@ -195,6 +216,36 @@ datasets_ex/
 - **Schema**: claim_evidence
 - **Task**: Fact extraction and verification
 
+### GSM8K
+- **Size**: 8,500 problems
+- **Splits**: train, test
+- **Schema**: math_word_problems
+- **Task**: Grade school math reasoning
+
+### HumanEval
+- **Size**: 164 problems
+- **Splits**: (single dataset)
+- **Schema**: code_generation
+- **Task**: Programming problem solving
+
+### MMLU
+- **Size**: 15,908 questions
+- **Splits**: test, dev, val
+- **Schema**: multiple_choice
+- **Task**: Multitask language understanding (57 subjects)
+
+### TruthfulQA
+- **Size**: 817 questions
+- **Splits**: validation
+- **Schema**: truthfulness
+- **Task**: Truthful question answering
+
+### HellaSwag
+- **Size**: 70,000 examples
+- **Splits**: train, val, test
+- **Schema**: commonsense_nli
+- **Task**: Commonsense natural language inference
+
 ## Design Patterns
 
 ### Dataset Struct
@@ -279,6 +330,97 @@ DatasetsEx.export(val, format: :jsonl, path: "val.jsonl")
 DatasetsEx.export(test, format: :jsonl, path: "test.jsonl")
 ```
 
+## Data Transformation
+
+Transform datasets with text preprocessing, filtering, and augmentation:
+
+```elixir
+alias DatasetsEx.Transform
+
+# Normalize text
+dataset
+|> Transform.normalize_text(lowercase: true, trim: true)
+
+# Remove duplicates
+|> Transform.deduplicate(:text)
+
+# Filter by condition
+|> Transform.filter(fn item -> String.length(item.text) > 10 end)
+
+# Sample random subset
+|> Transform.sample(1000, seed: 42)
+
+# Balance classes
+|> Transform.balance_classes(strategy: :oversample, label_key: :label)
+
+# Add text noise for augmentation
+|> Transform.add_text_noise(char_noise_prob: 0.05, word_drop_prob: 0.1)
+```
+
+## Quality Checks
+
+Validate and analyze dataset quality:
+
+```elixir
+alias DatasetsEx.Quality
+
+# Validate schema
+{:ok, result} = Quality.validate_schema(dataset,
+  required_keys: [:text, :label],
+  type_checks: %{text: &is_binary/1, label: &is_atom/1}
+)
+
+# Detect duplicates
+result = Quality.detect_duplicates(dataset, key: :text, ignore_case: true)
+# => %{duplicate_groups: 5, duplicate_rate: 0.12, ...}
+
+# Analyze label distribution
+result = Quality.label_distribution(dataset, label_key: :label)
+# => %{num_classes: 3, is_balanced: false, distribution: %{...}}
+
+# Profile dataset
+profile = Quality.profile(dataset)
+# => %{text_stats: %{min_length: 5, max_length: 500, ...}, vocabulary: %{...}}
+
+# Detect outliers
+result = Quality.detect_outliers(dataset, field: :score, method: :iqr)
+# => %{outlier_count: 12, outlier_indices: [45, 67, ...]}
+```
+
+## Streaming Large Datasets
+
+Process large datasets efficiently without loading everything into memory:
+
+```elixir
+alias DatasetsEx.Stream
+
+# Stream from dataset
+dataset
+|> Stream.lazy()
+|> Stream.map_stream(fn item -> transform(item) end)
+|> Stream.filter_stream(fn item -> valid?(item) end)
+|> Enum.take(1000)
+
+# Stream from file
+Stream.from_file("large_dataset.jsonl", format: :jsonl)
+|> Stream.take(10000)
+|> Enum.to_list()
+
+# Batch processing
+dataset
+|> Stream.batch(batch_size: 32)
+|> Enum.each(fn batch -> process_batch(batch) end)
+
+# Parallel processing
+dataset
+|> Stream.lazy()
+|> Stream.parallel_map(
+  fn item -> expensive_operation(item) end,
+  max_concurrency: 4
+)
+|> Enum.to_list()
+```
+
 ## Testing
 
 Run the test suite:
@@ -287,6 +429,8 @@ Run the test suite:
 mix test
 mix test --cover
 ```
+
+Current test count: 76 tests
 
 ## Documentation
 
