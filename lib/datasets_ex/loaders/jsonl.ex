@@ -3,7 +3,7 @@ defmodule DatasetsEx.Loaders.Jsonl do
   Generic JSONL loader for custom datasets.
   """
 
-  alias DatasetsEx.{Dataset, Loader}
+  alias DatasetsEx.Loader
 
   def load(info, opts \\ []) do
     # For generic datasets, assume they're already downloaded

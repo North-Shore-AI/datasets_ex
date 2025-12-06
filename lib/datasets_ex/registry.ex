@@ -4,7 +4,6 @@ defmodule DatasetsEx.Registry do
   """
 
   use GenServer
-  alias DatasetsEx.Dataset
 
   @registry_file "registry.json"
 
@@ -174,6 +173,67 @@ defmodule DatasetsEx.Registry do
         metadata: %{
           format: :jsonl,
           task: "fact_verification"
+        }
+      },
+      gsm8k: %{
+        name: :gsm8k,
+        description: "Grade School Math 8K word problems",
+        size: 8500,
+        splits: [:train, :test],
+        schema: :math_word_problems,
+        source: "https://github.com/openai/grade-school-math",
+        metadata: %{
+          format: :jsonl,
+          task: "math_reasoning"
+        }
+      },
+      human_eval: %{
+        name: :human_eval,
+        description: "Hand-written programming problems for code generation",
+        size: 164,
+        splits: [],
+        schema: :code_generation,
+        source: "https://github.com/openai/human-eval",
+        metadata: %{
+          format: :jsonl,
+          task: "code_generation"
+        }
+      },
+      mmlu: %{
+        name: :mmlu,
+        description: "Massive Multitask Language Understanding benchmark",
+        size: 15_908,
+        splits: [:test, :dev, :val],
+        schema: :multiple_choice,
+        source: "https://people.eecs.berkeley.edu/~hendrycks/data.tar",
+        metadata: %{
+          format: :jsonl,
+          task: "knowledge_evaluation",
+          num_subjects: 57
+        }
+      },
+      truthful_qa: %{
+        name: :truthful_qa,
+        description: "Benchmark for truthful question answering",
+        size: 817,
+        splits: [:validation],
+        schema: :truthfulness,
+        source: "https://github.com/sylinrl/TruthfulQA",
+        metadata: %{
+          format: :jsonl,
+          task: "truthfulness_evaluation"
+        }
+      },
+      hellaswag: %{
+        name: :hellaswag,
+        description: "Commonsense natural language inference",
+        size: 70_000,
+        splits: [:train, :val, :test],
+        schema: :commonsense_nli,
+        source: "https://rowanzellers.com/hellaswag/",
+        metadata: %{
+          format: :jsonl,
+          task: "commonsense_inference"
         }
       }
     }

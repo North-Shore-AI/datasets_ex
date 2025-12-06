@@ -38,11 +38,11 @@ defmodule DatasetsEx.Loaders.Scifact do
     }
   end
 
-  defp download_and_cache(info, cache_path) do
+  defp download_and_cache(_info, cache_path) do
     File.mkdir_p!(cache_path)
 
     # For now, we'll create placeholder files
-    # In production, this would download from info.source
+    # In production, this would download from _info.source
     create_placeholder_files(cache_path)
   end
 

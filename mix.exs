@@ -43,7 +43,10 @@ defmodule DatasetsEx.MixProject do
       {:jason, "~> 1.4"},
       {:nimble_csv, "~> 1.2"},
       {:req, "~> 0.4"},
-      {:ex_doc, "~> 0.31", only: :dev, runtime: false}
+      {:gen_stage, "~> 1.2"},
+      {:ex_doc, "~> 0.31", only: :dev, runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 end

@@ -18,7 +18,9 @@ defmodule DatasetsEx.Splitter do
 
       {train, test} = DatasetsEx.Splitter.split(dataset, ratio: 0.8, seed: 42)
   """
-  def split(%Dataset{data: data} = dataset, opts \\ []) when is_list(data) do
+  def split(dataset, opts \\ [])
+
+  def split(%Dataset{data: data} = dataset, opts) when is_list(data) do
     ratio = Keyword.get(opts, :ratio, 0.8)
     seed = Keyword.get(opts, :seed)
     shuffle = Keyword.get(opts, :shuffle, true)
@@ -53,7 +55,9 @@ defmodule DatasetsEx.Splitter do
 
       {train, val, test} = DatasetsEx.Splitter.split_three(dataset, ratios: [0.7, 0.15, 0.15])
   """
-  def split_three(%Dataset{data: data} = dataset, opts \\ []) when is_list(data) do
+  def split_three(dataset, opts \\ [])
+
+  def split_three(%Dataset{data: data} = dataset, opts) when is_list(data) do
     ratios = Keyword.get(opts, :ratios, [0.7, 0.15, 0.15])
     seed = Keyword.get(opts, :seed)
     shuffle = Keyword.get(opts, :shuffle, true)
@@ -95,7 +99,9 @@ defmodule DatasetsEx.Splitter do
 
       folds = DatasetsEx.Splitter.k_fold(dataset, k: 5, seed: 42)
   """
-  def k_fold(%Dataset{data: data} = dataset, opts \\ []) when is_list(data) do
+  def k_fold(dataset, opts \\ [])
+
+  def k_fold(%Dataset{data: data} = dataset, opts) when is_list(data) do
     k = Keyword.get(opts, :k, 5)
     seed = Keyword.get(opts, :seed)
     shuffle = Keyword.get(opts, :shuffle, true)

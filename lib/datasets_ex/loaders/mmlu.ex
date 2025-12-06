@@ -1,13 +1,34 @@
-defmodule DatasetsEx.Loaders.Fever do
+defmodule DatasetsEx.Loaders.Mmlu do
   @moduledoc """
-  Loader for the FEVER dataset.
+  Loader for the MMLU (Massive Multitask Language Understanding) dataset.
+
+  MMLU is a benchmark designed to measure knowledge acquired during
+  pretraining by evaluating models on 57 subjects across STEM,
+  humanities, social sciences, and more.
   """
 
   alias DatasetsEx.Dataset
 
-  @cache_dir "fever"
+  @cache_dir "mmlu"
 
-  def load(info, opts \\ []) do
+  @doc """
+  Loads the MMLU dataset.
+
+  ## Options
+
+    * `:split` - Load a specific split (:test, :dev, :val)
+    * `:subject` - Load a specific subject (e.g., :abstract_algebra)
+    * `:limit` - Limit the number of examples
+    * `:offset` - Skip the first N examples
+    * `:cache` - Use cached version if available (default: true)
+
+  ## Examples
+
+      {:ok, mmlu} = DatasetsEx.Loaders.Mmlu.load(info, split: :test)
+      {:ok, mmlu} = DatasetsEx.Loaders.Mmlu.load(info, subject: :computer_science)
+  """
+  @spec load(map(), keyword()) :: {:ok, Dataset.t()}
+  def load(_info, opts \\ []) do
     cache_path = get_cache_path()
     use_cache = Keyword.get(opts, :cache, true)
 
@@ -15,7 +36,7 @@ defmodule DatasetsEx.Loaders.Fever do
       if use_cache and File.exists?(cache_path) do
         load_from_cache(cache_path)
       else
-        download_and_cache(info, cache_path)
+        download_and_cache(cache_path)
       end
 
     dataset = build_dataset(dataset_files, opts)
@@ -32,28 +53,24 @@ defmodule DatasetsEx.Loaders.Fever do
 
   defp load_from_cache(cache_path) do
     %{
-      train: Path.join(cache_path, "train.jsonl"),
+      test: Path.join(cache_path, "test.jsonl"),
       dev: Path.join(cache_path, "dev.jsonl"),
-      test: Path.join(cache_path, "test.jsonl")
+      val: Path.join(cache_path, "val.jsonl")
     }
   end
 
-  defp download_and_cache(_info, cache_path) do
+  defp download_and_cache(cache_path) do
     File.mkdir_p!(cache_path)
-
-    # For now, we'll create placeholder files
-    # In production, this would download from _info.source
     create_placeholder_files(cache_path)
   end
 
   defp create_placeholder_files(cache_path) do
     files = %{
-      train: Path.join(cache_path, "train.jsonl"),
+      test: Path.join(cache_path, "test.jsonl"),
       dev: Path.join(cache_path, "dev.jsonl"),
-      test: Path.join(cache_path, "test.jsonl")
+      val: Path.join(cache_path, "val.jsonl")
     }
 
-    # Create empty files if they don't exist
     Enum.each(files, fn {_key, path} ->
       unless File.exists?(path) do
         File.write!(path, "")
@@ -71,33 +88,33 @@ defmodule DatasetsEx.Loaders.Fever do
     splits =
       case split do
         nil ->
-          # Load all splits
           %{
-            train: load_split(files.train, limit, offset),
+            test: load_split(files.test, limit, offset),
             dev: load_split(files.dev, limit, offset),
-            test: load_split(files.test, limit, offset)
+            val: load_split(files.val, limit, offset)
           }
 
         split_name ->
-          # Load specific split
           file =
             case split_name do
-              :train -> files.train
-              :dev -> files.dev
               :test -> files.test
+              :dev -> files.dev
+              :val -> files.val
               _ -> raise "Unknown split: #{split_name}"
             end
 
           %{split_name => load_split(file, limit, offset)}
       end
 
-    Dataset.new("fever",
+    Dataset.new("mmlu",
       splits: splits,
-      schema: :claim_evidence,
+      schema: :multiple_choice,
       metadata: %{
-        source: "FEVER dataset",
+        source: "MMLU dataset",
         format: :jsonl,
-        task: "fact_verification",
+        task: "knowledge_evaluation",
+        description: "Massive Multitask Language Understanding",
+        num_subjects: 57,
         loaded_at: DateTime.utc_now()
       }
     )

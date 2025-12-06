@@ -1,13 +1,31 @@
-defmodule DatasetsEx.Loaders.Fever do
+defmodule DatasetsEx.Loaders.Gsm8k do
   @moduledoc """
-  Loader for the FEVER dataset.
+  Loader for the GSM8K (Grade School Math 8K) dataset.
+
+  GSM8K is a dataset of 8.5K high quality linguistically diverse
+  grade school math word problems created by human problem writers.
   """
 
   alias DatasetsEx.Dataset
 
-  @cache_dir "fever"
+  @cache_dir "gsm8k"
 
-  def load(info, opts \\ []) do
+  @doc """
+  Loads the GSM8K dataset.
+
+  ## Options
+
+    * `:split` - Load a specific split (:train or :test)
+    * `:limit` - Limit the number of examples
+    * `:offset` - Skip the first N examples
+    * `:cache` - Use cached version if available (default: true)
+
+  ## Examples
+
+      {:ok, gsm8k} = DatasetsEx.Loaders.Gsm8k.load(info, split: :train)
+  """
+  @spec load(map(), keyword()) :: {:ok, Dataset.t()}
+  def load(_info, opts \\ []) do
     cache_path = get_cache_path()
     use_cache = Keyword.get(opts, :cache, true)
 
@@ -15,7 +33,7 @@ defmodule DatasetsEx.Loaders.Fever do
       if use_cache and File.exists?(cache_path) do
         load_from_cache(cache_path)
       else
-        download_and_cache(info, cache_path)
+        download_and_cache(cache_path)
       end
 
     dataset = build_dataset(dataset_files, opts)
@@ -33,23 +51,18 @@ defmodule DatasetsEx.Loaders.Fever do
   defp load_from_cache(cache_path) do
     %{
       train: Path.join(cache_path, "train.jsonl"),
-      dev: Path.join(cache_path, "dev.jsonl"),
       test: Path.join(cache_path, "test.jsonl")
     }
   end
 
-  defp download_and_cache(_info, cache_path) do
+  defp download_and_cache(cache_path) do
     File.mkdir_p!(cache_path)
-
-    # For now, we'll create placeholder files
-    # In production, this would download from _info.source
     create_placeholder_files(cache_path)
   end
 
   defp create_placeholder_files(cache_path) do
     files = %{
       train: Path.join(cache_path, "train.jsonl"),
-      dev: Path.join(cache_path, "dev.jsonl"),
       test: Path.join(cache_path, "test.jsonl")
     }
 
@@ -74,7 +87,6 @@ defmodule DatasetsEx.Loaders.Fever do
           # Load all splits
           %{
             train: load_split(files.train, limit, offset),
-            dev: load_split(files.dev, limit, offset),
             test: load_split(files.test, limit, offset)
           }
 
@@ -83,7 +95,6 @@ defmodule DatasetsEx.Loaders.Fever do
           file =
             case split_name do
               :train -> files.train
-              :dev -> files.dev
               :test -> files.test
               _ -> raise "Unknown split: #{split_name}"
             end
@@ -91,13 +102,14 @@ defmodule DatasetsEx.Loaders.Fever do
           %{split_name => load_split(file, limit, offset)}
       end
 
-    Dataset.new("fever",
+    Dataset.new("gsm8k",
       splits: splits,
-      schema: :claim_evidence,
+      schema: :math_word_problems,
       metadata: %{
-        source: "FEVER dataset",
+        source: "GSM8K dataset",
         format: :jsonl,
-        task: "fact_verification",
+        task: "math_reasoning",
+        description: "Grade school math word problems",
         loaded_at: DateTime.utc_now()
       }
     )

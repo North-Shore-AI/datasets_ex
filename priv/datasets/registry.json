@@ -81,18 +81,44 @@
     },
     "registered_at": "2025-12-06T17:15:55.288978Z"
   },
+  "example_dataset": {
+    "name": "example_dataset",
+    "metadata": {
+      "size": 3,
+      "metadata": {
+        "source": "manual",
+        "created_by": "example_script"
+      },
+      "schema": "claim_evidence",
+      "splits": []
+    },
+    "registered_at": "2025-12-06T17:17:12.711570Z"
+  },
+  "larger_example": {
+    "name": "larger_example",
+    "metadata": {
+      "size": 30,
+      "metadata": {
+        "source": "custom",
+        "created_at": "2025-12-06T17:17:12.720994Z"
+      },
+      "schema": null,
+      "splits": []
+    },
+    "registered_at": "2025-12-06T17:17:12.721003Z"
+  },
   "kfold_test": {
     "name": "kfold_test",
     "metadata": {
       "size": 50,
       "metadata": {
         "source": "custom",
-        "created_at": "2025-12-06T17:16:26.520506Z"
+        "created_at": "2025-12-06T17:57:18.106404Z"
       },
       "schema": null,
       "splits": []
     },
-    "registered_at": "2025-12-06T17:16:26.520537Z"
+    "registered_at": "2025-12-06T17:57:18.106422Z"
   },
   "stratified_test": {
     "name": "stratified_test",
@@ -100,12 +126,12 @@
       "size": 100,
       "metadata": {
         "source": "custom",
-        "created_at": "2025-12-06T17:16:26.531500Z"
+        "created_at": "2025-12-06T17:57:18.111475Z"
       },
       "schema": null,
       "splits": []
     },
-    "registered_at": "2025-12-06T17:16:26.531522Z"
+    "registered_at": "2025-12-06T17:57:18.111504Z"
   },
   "test_workflow": {
     "name": "test_workflow",
@@ -117,7 +143,7 @@
       "schema": "test_schema",
       "splits": []
     },
-    "registered_at": "2025-12-06T17:16:26.532432Z"
+    "registered_at": "2025-12-06T17:57:18.102000Z"
   },
   "three_split_test": {
     "name": "three_split_test",
@@ -125,11 +151,11 @@
       "size": 100,
       "metadata": {
         "source": "custom",
-        "created_at": "2025-12-06T17:16:26.537773Z"
+        "created_at": "2025-12-06T17:57:18.093369Z"
       },
       "schema": null,
       "splits": []
     },
-    "registered_at": "2025-12-06T17:16:26.537782Z"
+    "registered_at": "2025-12-06T17:57:18.093382Z"
   }
 }
