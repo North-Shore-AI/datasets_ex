@@ -34,7 +34,7 @@ defmodule DatasetsEx.MixProject do
       maintainers: ["North Shore AI"],
       licenses: ["MIT"],
       links: %{"GitHub" => @source_url},
-      files: ~w(lib mix.exs README.md LICENSE)
+      files: ~w(lib mix.exs README.md LICENSE assets)
     ]
   end
 
@@ -43,7 +43,9 @@ defmodule DatasetsEx.MixProject do
       main: "readme",
       source_ref: "v#{@version}",
       source_url: @source_url,
-      extras: ["README.md"]
+      assets: %{"assets" => "assets"},
+      logo: "assets/datasets_ex.svg",
+      extras: ["README.md", "LICENSE"]
     ]
   end
 
