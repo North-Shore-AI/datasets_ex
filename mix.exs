@@ -1,30 +1,48 @@
 defmodule DatasetsEx.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+  @source_url "https://github.com/North-Shore-AI/datasets_ex"
+
+  def version, do: @version
+
   def project do
     [
       app: :datasets_ex,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      description: "Dataset management library for ML experiments",
+      description: description(),
       package: package(),
-      docs: docs()
+      docs: docs(),
+      name: "DatasetsEx",
+      source_url: @source_url,
+      homepage_url: @source_url
     ]
+  end
+
+  defp description do
+    """
+    Dataset management library for ML experiments with support for GSM8K, HumanEval, MMLU loaders and evaluation metrics (BLEU, ROUGE, F1).
+    """
   end
 
   defp package do
     [
+      name: "datasets_ex",
       maintainers: ["North Shore AI"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/North-Shore-AI/datasets_ex"}
+      links: %{"GitHub" => @source_url},
+      files: ~w(lib mix.exs README.md LICENSE)
     ]
   end
 
   defp docs do
     [
-      main: "DatasetsEx",
+      main: "readme",
+      source_ref: "v#{@version}",
+      source_url: @source_url,
       extras: ["README.md"]
     ]
   end
