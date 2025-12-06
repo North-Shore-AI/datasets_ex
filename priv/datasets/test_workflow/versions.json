@@ -1,0 +1,47 @@
+[
+  {
+    "size": 100,
+    "version": "v1.0.0",
+    "metadata": {
+      "source": "integration_test"
+    },
+    "hash": "8d5fe8f1075c36367c9b716f79c52b54450a4b5c525811375a00e5c680ae3bae",
+    "created_at": "2025-12-06T17:16:26.534129Z"
+  },
+  {
+    "created_at": "2025-12-06T17:16:17.851000Z",
+    "hash": "8d5fe8f1075c36367c9b716f79c52b54450a4b5c525811375a00e5c680ae3bae",
+    "metadata": {
+      "source": "integration_test"
+    },
+    "size": 100,
+    "version": "v1.0.0"
+  },
+  {
+    "created_at": "2025-12-06T17:16:12.856224Z",
+    "hash": "8d5fe8f1075c36367c9b716f79c52b54450a4b5c525811375a00e5c680ae3bae",
+    "metadata": {
+      "source": "integration_test"
+    },
+    "size": 100,
+    "version": "v1.0.0"
+  },
+  {
+    "created_at": "2025-12-06T17:16:00.349564Z",
+    "hash": "8d5fe8f1075c36367c9b716f79c52b54450a4b5c525811375a00e5c680ae3bae",
+    "metadata": {
+      "source": "integration_test"
+    },
+    "size": 100,
+    "version": "v1.0.0"
+  },
+  {
+    "created_at": "2025-12-06T17:15:55.281243Z",
+    "hash": "8d5fe8f1075c36367c9b716f79c52b54450a4b5c525811375a00e5c680ae3bae",
+    "metadata": {
+      "source": "integration_test"
+    },
+    "size": 100,
+    "version": "v1.0.0"
+  }
+]

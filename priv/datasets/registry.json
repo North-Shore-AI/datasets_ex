@@ -1,0 +1,135 @@
+{
+  "fever": {
+    "name": "fever",
+    "size": 185445,
+    "description": "Fact Extraction and VERification dataset",
+    "metadata": {
+      "format": "jsonl",
+      "task": "fact_verification"
+    },
+    "source": "https://fever.ai/download/fever/train.jsonl",
+    "schema": "claim_evidence",
+    "splits": [
+      "train",
+      "dev",
+      "test"
+    ]
+  },
+  "scifact": {
+    "name": "scifact",
+    "size": 5183,
+    "description": "Scientific claim verification dataset",
+    "metadata": {
+      "format": "jsonl",
+      "task": "claim_verification"
+    },
+    "source": "https://scifact.s3.us-west-2.amazonaws.com/release/latest/data.tar.gz",
+    "schema": "claim_evidence",
+    "splits": [
+      "train",
+      "test"
+    ]
+  },
+  "kfold_test": {
+    "name": "kfold_test",
+    "metadata": {
+      "size": 50,
+      "metadata": {
+        "source": "custom",
+        "created_at": "2025-12-06T17:15:55.298244Z"
+      },
+      "schema": null,
+      "splits": []
+    },
+    "registered_at": "2025-12-06T17:15:55.298271Z"
+  },
+  "stratified_test": {
+    "name": "stratified_test",
+    "metadata": {
+      "size": 100,
+      "metadata": {
+        "source": "custom",
+        "created_at": "2025-12-06T17:15:55.252945Z"
+      },
+      "schema": null,
+      "splits": []
+    },
+    "registered_at": "2025-12-06T17:15:55.256952Z"
+  },
+  "test_workflow": {
+    "name": "test_workflow",
+    "metadata": {
+      "size": 100,
+      "metadata": {
+        "source": "integration_test"
+      },
+      "schema": "test_schema",
+      "splits": []
+    },
+    "registered_at": "2025-12-06T17:15:55.271628Z"
+  },
+  "three_split_test": {
+    "name": "three_split_test",
+    "metadata": {
+      "size": 100,
+      "metadata": {
+        "source": "custom",
+        "created_at": "2025-12-06T17:15:55.288959Z"
+      },
+      "schema": null,
+      "splits": []
+    },
+    "registered_at": "2025-12-06T17:15:55.288978Z"
+  },
+  "kfold_test": {
+    "name": "kfold_test",
+    "metadata": {
+      "size": 50,
+      "metadata": {
+        "source": "custom",
+        "created_at": "2025-12-06T17:16:26.520506Z"
+      },
+      "schema": null,
+      "splits": []
+    },
+    "registered_at": "2025-12-06T17:16:26.520537Z"
+  },
+  "stratified_test": {
+    "name": "stratified_test",
+    "metadata": {
+      "size": 100,
+      "metadata": {
+        "source": "custom",
+        "created_at": "2025-12-06T17:16:26.531500Z"
+      },
+      "schema": null,
+      "splits": []
+    },
+    "registered_at": "2025-12-06T17:16:26.531522Z"
+  },
+  "test_workflow": {
+    "name": "test_workflow",
+    "metadata": {
+      "size": 100,
+      "metadata": {
+        "source": "integration_test"
+      },
+      "schema": "test_schema",
+      "splits": []
+    },
+    "registered_at": "2025-12-06T17:16:26.532432Z"
+  },
+  "three_split_test": {
+    "name": "three_split_test",
+    "metadata": {
+      "size": 100,
+      "metadata": {
+        "source": "custom",
+        "created_at": "2025-12-06T17:16:26.537773Z"
+      },
+      "schema": null,
+      "splits": []
+    },
+    "registered_at": "2025-12-06T17:16:26.537782Z"
+  }
+}
