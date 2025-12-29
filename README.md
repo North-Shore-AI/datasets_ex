@@ -13,20 +13,26 @@
 </p>
 
 <p align="center">
-  Dataset management with versioning, multiple loaders, and streaming support
+  Custom and internal dataset management for NSAI with versioning, lineage tracking, and streaming support
 </p>
 
 ---
 
-Dataset management library for ML experiments in Elixir.
+**Custom/internal dataset management library for North Shore AI.**
 
-DatasetsEx provides a comprehensive toolkit for managing datasets in machine learning pipelines, with built-in support for standard datasets (SciFact, FEVER), custom dataset creation, versioning, splitting, and export to multiple formats.
+DatasetsEx is the home for NSAI's own proprietary and custom datasets. It provides comprehensive versioning, lineage tracking, and data curation tools for datasets created and maintained by the NSAI team.
+
+> **Note on Dataset Libraries**: NSAI has two dataset libraries with distinct purposes:
+> - **datasets_ex** (this library): For NSAI's own custom/internal/proprietary datasets with full versioning and lineage
+> - **crucible_datasets**: For integrating external benchmark datasets via `hf_datasets_ex` (HuggingFace) plus evaluation workflows
+>
+> Use `datasets_ex` when creating and managing your own datasets. Use `crucible_datasets` when working with standard ML benchmarks (MMLU, GSM8K, HumanEval, etc.) and evaluation metrics.
 
 ## Features
 
-- **Standard Dataset Loading**: Built-in loaders for SciFact, FEVER, GSM8K, HumanEval, MMLU, TruthfulQA, HellaSwag, and custom datasets
-- **Custom Datasets**: Create and manage your own datasets with flexible schemas
-- **Versioning & Lineage**: Track dataset versions with full lineage history and diffs
+- **Custom Dataset Creation**: Build and manage NSAI's proprietary datasets with flexible schemas
+- **Versioning & Lineage**: Track dataset versions with full lineage history, diffs, and SHA-256 checksums
+- **Reference Dataset Loading**: Built-in loaders for reference datasets (SciFact, FEVER) used in CNS development
 - **Smart Splitting**: Train/test splits with support for stratification and k-fold cross-validation
 - **Multiple Formats**: Import/export JSONL, JSON, and CSV formats
 - **Reproducibility**: Deterministic splits with seed support
