@@ -8,6 +8,7 @@ defmodule DatasetsEx do
   - Versioning and lineage tracking
   - Train/test splitting
   - Export to various formats
+  - Emitting LineageIR artifact references and provenance edges
 
   ## Examples
 
@@ -35,11 +36,12 @@ defmodule DatasetsEx do
 
   alias DatasetsEx.{
     Dataset,
+    Export,
+    Lineage,
     Loader,
     Registry,
     Splitter,
-    Versioning,
-    Export
+    Versioning
   }
 
   # Dataset Loading
@@ -181,6 +183,18 @@ defmodule DatasetsEx do
   Lists all versions of a dataset.
   """
   defdelegate list_versions(name), to: Versioning
+
+  # Lineage
+
+  @doc """
+  Builds a LineageIR.ArtifactRef for a dataset.
+  """
+  defdelegate artifact_ref(dataset, opts \\ []), to: Lineage
+
+  @doc """
+  Builds a LineageIR.ProvenanceEdge between datasets or artifact refs.
+  """
+  defdelegate lineage_edge(source, target, opts \\ []), to: Lineage, as: :edge
 
   # Dataset Export
 

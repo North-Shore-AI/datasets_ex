@@ -142,8 +142,7 @@ defmodule DatasetsEx.IntegrationTest do
 
       content =
         1..10
-        |> Enum.map(&~s({"id": #{&1}, "value": "test#{&1}"}))
-        |> Enum.join("\n")
+        |> Enum.map_join("\n", &~s({"id": #{&1}, "value": "test#{&1}"}))
 
       File.write!(jsonl_path, content)
 
@@ -175,7 +174,7 @@ defmodule DatasetsEx.IntegrationTest do
     test "gets dataset info" do
       info = DatasetsEx.info(:scifact)
       assert info != nil
-      assert length(info.splits) > 0
+      refute Enum.empty?(info.splits)
       assert info.size > 0
     end
   end

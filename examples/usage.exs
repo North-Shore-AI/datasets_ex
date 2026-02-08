@@ -112,6 +112,22 @@ File.write!(test_jsonl, """
 {:ok, loaded} = DatasetsEx.load_file(test_jsonl, schema: :test)
 Logger.info("Loaded #{DatasetsEx.size(loaded)} examples from file")
 
+# Example 9: Lineage artifact references
+Logger.info("\n9. Lineage artifact references...")
+
+dataset_ref = DatasetsEx.artifact_ref(dataset)
+normalized = DatasetsEx.Transform.normalize_text(dataset)
+normalized_ref = DatasetsEx.artifact_ref(normalized)
+
+edge =
+  DatasetsEx.lineage_edge(dataset_ref, normalized_ref,
+    relationship: "derived_from",
+    metadata: %{operation: "normalize_text"}
+  )
+
+Logger.info("Artifact ref id: #{dataset_ref.artifact_id}")
+Logger.info("Lineage edge: #{edge.relationship}")
+
 Logger.info("\n" <> ("=" |> String.duplicate(50)))
 Logger.info("Examples completed successfully!")
 Logger.info("Temporary files created in: #{tmp_dir}")

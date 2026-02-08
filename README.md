@@ -33,6 +33,7 @@ DatasetsEx is the home for NSAI's own proprietary and custom datasets. It provid
 - **Custom Dataset Creation**: Build and manage NSAI's proprietary datasets with flexible schemas
 - **Versioning & Lineage**: Track dataset versions with full lineage history, diffs, and SHA-256 checksums
 - **Reference Dataset Loading**: Built-in loaders for reference datasets (SciFact, FEVER) used in CNS development
+- **LineageIR Integration**: Emit artifact references and provenance edges for dataset pipeline tracking
 - **Smart Splitting**: Train/test splits with support for stratification and k-fold cross-validation
 - **Multiple Formats**: Import/export JSONL, JSON, and CSV formats
 - **Reproducibility**: Deterministic splits with seed support
@@ -47,7 +48,7 @@ Add `datasets_ex` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:datasets_ex, "~> 0.1.0"}
+    {:datasets_ex, "~> 0.2.0"}
   ]
 end
 ```
@@ -152,6 +153,29 @@ DatasetsEx.lineage("my_dataset")
 # ]
 ```
 
+### LineageIR Artifact References
+
+DatasetsEx can emit LineageIR artifact references for dataset nodes and pipeline edges:
+
+```elixir
+{:ok, dataset} =
+  DatasetsEx.create("my_dataset", %{
+    data: [%{text: "hello", label: :greeting}],
+    schema: :text_classification
+  })
+
+dataset_ref = DatasetsEx.artifact_ref(dataset)
+
+normalized = DatasetsEx.Transform.normalize_text(dataset)
+normalized_ref = DatasetsEx.artifact_ref(normalized)
+
+edge =
+  DatasetsEx.lineage_edge(dataset_ref, normalized_ref,
+    relationship: "derived_from",
+    metadata: %{operation: "normalize_text"}
+  )
+```
+
 ### Exporting Datasets
 
 ```elixir
@@ -199,6 +223,7 @@ datasets_ex/
 │       │   ├── scifact.ex      # SciFact dataset loader
 │       │   ├── fever.ex        # FEVER dataset loader
 │       │   └── jsonl.ex        # Generic JSONL loader
+│       ├── lineage.ex          # LineageIR artifact refs & provenance edges
 │       ├── splitter.ex         # Train/test splitting
 │       ├── versioning.ex       # Version management
 │       └── export.ex           # Multi-format export
@@ -264,6 +289,7 @@ All datasets use a consistent structure:
   splits: %{train: [...], test: [...]},  # Optional: pre-split data
   schema: :claim_evidence,
   metadata: %{source: "...", ...},
+  artifact_id: "550e8400-...",       # Auto-generated UUID for lineage
   version: "v1.0.0",
   hash: "abc123..."                 # SHA-256 of content
 }
@@ -455,4 +481,3 @@ DatasetsEx is part of the North Shore AI monorepo. Contributions welcome!
 ## License
 
 MIT
-

@@ -179,25 +179,24 @@ defmodule DatasetsEx.Stream do
       |> NimbleCSV.RFC4180.parse_stream(skip_headers: false)
 
     if headers do
-      base_stream
-      |> Stream.transform(nil, fn row, header_row ->
-        case header_row do
-          nil ->
-            # First row is headers
-            {[], row}
-
-          headers ->
-            # Subsequent rows are data
-            item =
-              headers
-              |> Enum.zip(row)
-              |> Map.new()
-
-            {[item], headers}
-        end
-      end)
+      stream_csv_with_headers(base_stream)
     else
       base_stream
     end
+  end
+
+  defp stream_csv_with_headers(base_stream) do
+    Stream.transform(base_stream, :header, &stream_csv_row/2)
+  end
+
+  defp stream_csv_row(row, :header), do: {[], row}
+
+  defp stream_csv_row(row, headers) do
+    item =
+      headers
+      |> Enum.zip(row)
+      |> Map.new()
+
+    {[item], headers}
   end
 end

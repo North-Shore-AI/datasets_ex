@@ -15,6 +15,7 @@ defmodule DatasetsEx.Dataset do
           splits: splits(),
           schema: atom() | nil,
           metadata: map(),
+          artifact_id: Ecto.UUID.t() | nil,
           version: String.t() | nil,
           hash: String.t() | nil
         }
@@ -23,6 +24,7 @@ defmodule DatasetsEx.Dataset do
     :name,
     :data,
     :schema,
+    :artifact_id,
     :version,
     :hash,
     splits: %{},
@@ -44,6 +46,7 @@ defmodule DatasetsEx.Dataset do
       splits: Keyword.get(opts, :splits, %{}),
       schema: Keyword.get(opts, :schema),
       metadata: Keyword.get(opts, :metadata, %{}),
+      artifact_id: Keyword.get(opts, :artifact_id, Ecto.UUID.generate()),
       version: Keyword.get(opts, :version),
       hash: Keyword.get(opts, :hash)
     }
@@ -105,4 +108,13 @@ defmodule DatasetsEx.Dataset do
   def with_hash(%__MODULE__{} = dataset) do
     %{dataset | hash: compute_hash(dataset)}
   end
+
+  @doc """
+  Ensures a dataset has an artifact id assigned.
+  """
+  def ensure_artifact_id(%__MODULE__{artifact_id: nil} = dataset) do
+    %{dataset | artifact_id: Ecto.UUID.generate()}
+  end
+
+  def ensure_artifact_id(%__MODULE__{} = dataset), do: dataset
 end

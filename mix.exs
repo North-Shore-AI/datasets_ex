@@ -1,7 +1,7 @@
 defmodule DatasetsEx.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.2.0"
   @source_url "https://github.com/North-Shore-AI/datasets_ex"
 
   def version, do: @version
@@ -45,7 +45,32 @@ defmodule DatasetsEx.MixProject do
       source_url: @source_url,
       assets: %{"assets" => "assets"},
       logo: "assets/datasets_ex.svg",
-      extras: ["README.md", "LICENSE"]
+      extras: [
+        "README.md",
+        "LICENSE"
+      ],
+      groups_for_extras: [
+        Guides: ~r/guides\/.*/
+      ],
+      groups_for_modules: [
+        Core: [
+          DatasetsEx,
+          DatasetsEx.Dataset,
+          DatasetsEx.Loader,
+          DatasetsEx.Registry
+        ],
+        "Versioning & Lineage": [
+          DatasetsEx.Versioning,
+          DatasetsEx.Lineage
+        ],
+        Utilities: [
+          DatasetsEx.Splitter,
+          DatasetsEx.Quality,
+          DatasetsEx.Transform,
+          DatasetsEx.Stream,
+          DatasetsEx.Export
+        ]
+      ]
     ]
   end
 
@@ -60,11 +85,13 @@ defmodule DatasetsEx.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:lineage_ir, path: "../lineage_ir"},
+      {:ecto, "~> 3.11"},
       {:jason, "~> 1.4"},
       {:nimble_csv, "~> 1.2"},
       {:req, "~> 0.4"},
       {:gen_stage, "~> 1.2"},
-      {:ex_doc, "~> 0.31", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.40.0", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]

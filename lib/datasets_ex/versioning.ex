@@ -15,6 +15,7 @@ defmodule DatasetsEx.Versioning do
       DatasetsEx.Versioning.create(dataset, "v1.0.0")
   """
   def create(%Dataset{} = dataset, version) do
+    dataset = Dataset.ensure_artifact_id(dataset)
     dataset_with_hash = Dataset.with_hash(dataset)
     versioned_dataset = %{dataset_with_hash | version: version}
 
@@ -46,6 +47,7 @@ defmodule DatasetsEx.Versioning do
         path
         |> File.read!()
         |> :erlang.binary_to_term()
+        |> Dataset.ensure_artifact_id()
 
       {:ok, dataset}
     else

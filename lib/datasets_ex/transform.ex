@@ -82,15 +82,9 @@ defmodule DatasetsEx.Transform do
 
       normalized =
         text
-        |> then(fn t -> if lowercase, do: String.downcase(t), else: t end)
-        |> then(fn t -> if trim, do: String.trim(t), else: t end)
-        |> then(fn t ->
-          if normalize_ws do
-            String.replace(t, ~r/\s+/, " ")
-          else
-            t
-          end
-        end)
+        |> maybe_downcase(lowercase)
+        |> maybe_trim(trim)
+        |> maybe_normalize_whitespace(normalize_ws)
 
       Map.put(item, text_key, normalized)
     end)
@@ -216,26 +210,10 @@ defmodule DatasetsEx.Transform do
     balanced =
       case strategy do
         :undersample ->
-          min_size = grouped |> Map.values() |> Enum.map(&length/1) |> Enum.min()
-
-          grouped
-          |> Enum.flat_map(fn {_label, items} ->
-            Enum.take_random(items, min_size)
-          end)
+          undersample_groups(grouped)
 
         :oversample ->
-          max_size = grouped |> Map.values() |> Enum.map(&length/1) |> Enum.max()
-
-          grouped
-          |> Enum.flat_map(fn {_label, items} ->
-            if length(items) < max_size do
-              # Oversample by repeating items
-              needed = max_size - length(items)
-              items ++ Enum.take_random(items, needed)
-            else
-              items
-            end
-          end)
+          oversample_groups(grouped)
       end
 
     %{dataset | data: balanced}
@@ -259,14 +237,13 @@ defmodule DatasetsEx.Transform do
     text
     |> String.split()
     |> Enum.reject(fn _word -> :rand.uniform() < word_drop_prob end)
-    |> Enum.map(fn word ->
+    |> Enum.map_join(" ", fn word ->
       if :rand.uniform() < char_noise_prob do
         apply_char_noise(word)
       else
         word
       end
     end)
-    |> Enum.join(" ")
   end
 
   defp apply_char_noise(word) do
@@ -274,32 +251,71 @@ defmodule DatasetsEx.Transform do
     noise_type = :rand.uniform(3)
 
     case noise_type do
-      1 ->
-        # Swap adjacent characters
-        if length(chars) > 1 do
-          idx = :rand.uniform(length(chars) - 1) - 1
+      1 -> swap_adjacent(chars, word)
+      2 -> delete_char(chars, word)
+      3 -> duplicate_char(chars)
+    end
+  end
 
-          List.update_at(chars, idx, fn c -> Enum.at(chars, idx + 1, c) end)
-          |> List.update_at(idx + 1, fn _ -> Enum.at(chars, idx) end)
-          |> Enum.join()
-        else
-          word
-        end
+  defp maybe_downcase(text, true), do: String.downcase(text)
+  defp maybe_downcase(text, false), do: text
 
-      2 ->
-        # Delete a character
-        if length(chars) > 1 do
-          idx = :rand.uniform(length(chars)) - 1
-          List.delete_at(chars, idx) |> Enum.join()
-        else
-          word
-        end
+  defp maybe_trim(text, true), do: String.trim(text)
+  defp maybe_trim(text, false), do: text
 
-      3 ->
-        # Duplicate a character
-        idx = :rand.uniform(length(chars)) - 1
-        char = Enum.at(chars, idx)
-        List.insert_at(chars, idx, char) |> Enum.join()
+  defp maybe_normalize_whitespace(text, true), do: String.replace(text, ~r/\s+/, " ")
+  defp maybe_normalize_whitespace(text, false), do: text
+
+  defp swap_adjacent(chars, original) do
+    if length(chars) > 1 do
+      idx = :rand.uniform(length(chars) - 1) - 1
+
+      chars
+      |> List.update_at(idx, fn c -> Enum.at(chars, idx + 1, c) end)
+      |> List.update_at(idx + 1, fn _ -> Enum.at(chars, idx) end)
+      |> Enum.join()
+    else
+      original
+    end
+  end
+
+  defp delete_char(chars, original) do
+    if length(chars) > 1 do
+      idx = :rand.uniform(length(chars)) - 1
+      List.delete_at(chars, idx) |> Enum.join()
+    else
+      original
+    end
+  end
+
+  defp duplicate_char(chars) do
+    idx = :rand.uniform(length(chars)) - 1
+    char = Enum.at(chars, idx)
+    List.insert_at(chars, idx, char) |> Enum.join()
+  end
+
+  defp undersample_groups(grouped) do
+    min_size = grouped |> Map.values() |> Enum.map(&length/1) |> Enum.min()
+
+    Enum.flat_map(grouped, fn {_label, items} ->
+      Enum.take_random(items, min_size)
+    end)
+  end
+
+  defp oversample_groups(grouped) do
+    max_size = grouped |> Map.values() |> Enum.map(&length/1) |> Enum.max()
+
+    Enum.flat_map(grouped, fn {_label, items} ->
+      oversample_items(items, max_size)
+    end)
+  end
+
+  defp oversample_items(items, max_size) do
+    if length(items) < max_size do
+      needed = max_size - length(items)
+      items ++ Enum.take_random(items, needed)
+    else
+      items
     end
   end
 end

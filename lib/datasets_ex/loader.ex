@@ -23,9 +23,8 @@ defmodule DatasetsEx.Loader do
   """
   def load(name, opts \\ []) do
     with {:ok, info} <- get_dataset_info(name),
-         {:ok, loader_module} <- get_loader_module(name),
-         {:ok, dataset} <- loader_module.load(info, opts) do
-      {:ok, dataset}
+         {:ok, loader_module} <- get_loader_module(name) do
+      loader_module.load(info, opts)
     end
   end
 
@@ -123,7 +122,7 @@ defmodule DatasetsEx.Loader do
       |> Enum.to_list()
 
     data =
-      if headers and length(all_rows) > 0 do
+      if headers and not Enum.empty?(all_rows) do
         [header_row | data_rows] = all_rows
 
         data_rows

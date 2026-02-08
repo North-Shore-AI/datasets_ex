@@ -34,8 +34,7 @@ defmodule DatasetsEx.LoaderTest do
 
       content =
         1..100
-        |> Enum.map(&~s({"id": #{&1}}))
-        |> Enum.join("\n")
+        |> Enum.map_join("\n", &~s({"id": #{&1}}))
 
       File.write!(path, content)
 
@@ -49,8 +48,7 @@ defmodule DatasetsEx.LoaderTest do
 
       content =
         1..10
-        |> Enum.map(&~s({"id": #{&1}}))
-        |> Enum.join("\n")
+        |> Enum.map_join("\n", &~s({"id": #{&1}}))
 
       File.write!(path, content)
 

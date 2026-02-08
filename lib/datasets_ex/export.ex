@@ -172,8 +172,7 @@ defmodule DatasetsEx.Export do
 
   defp write_csv_row(file, row) do
     row
-    |> Enum.map(&escape_csv_value/1)
-    |> Enum.join(",")
+    |> Enum.map_join(",", &escape_csv_value/1)
     |> then(&IO.write(file, &1 <> "\n"))
   end
 

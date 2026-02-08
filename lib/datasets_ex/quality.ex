@@ -70,33 +70,19 @@ defmodule DatasetsEx.Quality do
     ignore_case = Keyword.get(opts, :ignore_case, false)
 
     data = get_all_data(dataset)
+    total_items = length(data)
 
     {duplicates, total} =
       data
       |> Enum.with_index()
-      |> Enum.group_by(fn {item, _idx} ->
-        value = if key, do: Map.get(item, key), else: item
-
-        if ignore_case and is_binary(value) do
-          String.downcase(value)
-        else
-          value
-        end
-      end)
-      |> Enum.reduce({[], 0}, fn {_value, items}, {dupes, count} ->
-        if length(items) > 1 do
-          indices = Enum.map(items, fn {_item, idx} -> idx end)
-          {[%{count: length(items), indices: indices} | dupes], count + length(items)}
-        else
-          {dupes, count}
-        end
-      end)
+      |> Enum.group_by(fn {item, _idx} -> duplicate_key(item, key, ignore_case) end)
+      |> Enum.reduce({[], 0}, &accumulate_duplicates/2)
 
     %{
-      total_items: length(data),
+      total_items: total_items,
       duplicate_groups: length(duplicates),
       duplicate_items: total,
-      duplicate_rate: if(length(data) > 0, do: total / length(data), else: 0.0),
+      duplicate_rate: if(total_items > 0, do: total / total_items, else: 0.0),
       duplicates: Enum.take(duplicates, 10)
     }
   end
@@ -325,6 +311,35 @@ defmodule DatasetsEx.Quality do
     end)
   end
 
+  defp duplicate_key(item, key, ignore_case) do
+    value = if key, do: Map.get(item, key), else: item
+
+    if ignore_case and is_binary(value) do
+      String.downcase(value)
+    else
+      value
+    end
+  end
+
+  defp accumulate_duplicates({_value, items}, {dupes, count}) do
+    case duplicate_entry(items) do
+      nil ->
+        {dupes, count}
+
+      %{count: item_count} = entry ->
+        {[entry | dupes], count + item_count}
+    end
+  end
+
+  defp duplicate_entry(items) do
+    item_count = length(items)
+
+    if item_count > 1 do
+      indices = Enum.map(items, fn {_item, idx} -> idx end)
+      %{count: item_count, indices: indices}
+    end
+  end
+
   defp check_balance(distribution) do
     counts = distribution |> Map.values() |> Enum.map(& &1.count)
 
@@ -338,7 +353,7 @@ defmodule DatasetsEx.Quality do
     end
   end
 
-  defp median(list) when length(list) == 0, do: 0
+  defp median(list) when list == [], do: 0
 
   defp median(list) do
     sorted = Enum.sort(list)
