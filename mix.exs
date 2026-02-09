@@ -85,7 +85,7 @@ defmodule DatasetsEx.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:lineage_ir, path: "../lineage_ir"},
+      {:lineage_ir, "~> 0.1"},
       {:ecto, "~> 3.11"},
       {:jason, "~> 1.4"},
       {:nimble_csv, "~> 1.2"},

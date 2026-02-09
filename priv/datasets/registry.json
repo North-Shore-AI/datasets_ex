@@ -8,12 +8,12 @@
       "task": "fact_verification"
     },
     "source": "https://fever.ai/download/fever/train.jsonl",
+    "schema": "claim_evidence",
     "splits": [
       "train",
       "dev",
       "test"
-    ],
-    "schema": "claim_evidence"
+    ]
   },
   "scifact": {
     "name": "scifact",
@@ -24,11 +24,11 @@
       "task": "claim_verification"
     },
     "source": "https://scifact.s3.us-west-2.amazonaws.com/release/latest/data.tar.gz",
+    "schema": "claim_evidence",
     "splits": [
       "train",
       "test"
-    ],
-    "schema": "claim_evidence"
+    ]
   },
   "kfold_test": {
     "name": "kfold_test",
@@ -38,8 +38,8 @@
         "source": "custom",
         "created_at": "2025-12-06T17:15:55.298244Z"
       },
-      "splits": [],
-      "schema": null
+      "schema": null,
+      "splits": []
     },
     "registered_at": "2025-12-06T17:15:55.298271Z"
   },
@@ -51,8 +51,8 @@
         "source": "custom",
         "created_at": "2025-12-06T17:15:55.252945Z"
       },
-      "splits": [],
-      "schema": null
+      "schema": null,
+      "splits": []
     },
     "registered_at": "2025-12-06T17:15:55.256952Z"
   },
@@ -63,8 +63,8 @@
       "metadata": {
         "source": "integration_test"
       },
-      "splits": [],
-      "schema": "test_schema"
+      "schema": "test_schema",
+      "splits": []
     },
     "registered_at": "2025-12-06T17:15:55.271628Z"
   },
@@ -76,8 +76,8 @@
         "source": "custom",
         "created_at": "2025-12-06T17:15:55.288959Z"
       },
-      "splits": [],
-      "schema": null
+      "schema": null,
+      "splits": []
     },
     "registered_at": "2025-12-06T17:15:55.288978Z"
   },
@@ -89,8 +89,8 @@
         "source": "manual",
         "created_by": "example_script"
       },
-      "splits": [],
-      "schema": "claim_evidence"
+      "schema": "claim_evidence",
+      "splits": []
     },
     "registered_at": "2025-12-06T17:17:12.711570Z"
   },
@@ -102,8 +102,8 @@
         "source": "custom",
         "created_at": "2025-12-06T17:17:12.720994Z"
       },
-      "splits": [],
-      "schema": null
+      "schema": null,
+      "splits": []
     },
     "registered_at": "2025-12-06T17:17:12.721003Z"
   },
@@ -113,12 +113,12 @@
       "size": 50,
       "metadata": {
         "source": "custom",
-        "created_at": "2026-02-08T23:44:12.452237Z"
+        "created_at": "2026-02-09T00:10:22.075320Z"
       },
-      "splits": [],
-      "schema": null
+      "schema": null,
+      "splits": []
     },
-    "registered_at": "2026-02-08T23:44:12.452261Z"
+    "registered_at": "2026-02-09T00:10:22.075340Z"
   },
   "stratified_test": {
     "name": "stratified_test",
@@ -126,12 +126,12 @@
       "size": 100,
       "metadata": {
         "source": "custom",
-        "created_at": "2026-02-08T23:44:12.450825Z"
+        "created_at": "2026-02-09T00:10:22.067570Z"
       },
-      "splits": [],
-      "schema": null
+      "schema": null,
+      "splits": []
     },
-    "registered_at": "2026-02-08T23:44:12.450849Z"
+    "registered_at": "2026-02-09T00:10:22.067592Z"
   },
   "test_workflow": {
     "name": "test_workflow",
@@ -140,10 +140,10 @@
       "metadata": {
         "source": "integration_test"
       },
-      "splits": [],
-      "schema": "test_schema"
+      "schema": "test_schema",
+      "splits": []
     },
-    "registered_at": "2026-02-08T23:44:12.457419Z"
+    "registered_at": "2026-02-09T00:10:22.069470Z"
   },
   "three_split_test": {
     "name": "three_split_test",
@@ -151,11 +151,11 @@
       "size": 100,
       "metadata": {
         "source": "custom",
-        "created_at": "2026-02-08T23:44:12.443966Z"
+        "created_at": "2026-02-09T00:10:22.080398Z"
       },
-      "splits": [],
-      "schema": null
+      "schema": null,
+      "splits": []
     },
-    "registered_at": "2026-02-08T23:44:12.443989Z"
+    "registered_at": "2026-02-09T00:10:22.080415Z"
   }
 }
